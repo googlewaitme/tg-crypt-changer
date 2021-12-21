@@ -20,9 +20,9 @@ async def ask_about_currency(message: types.Message, state: FSMContext):
 async def ask_about_count(message: types.Message, state: FSMContext):
     if message.text not in config.CURRENCYES:
         text = "<b>Неверный ввод:</b> "
-        message.answer(text)
+        await message.answer(text)
         text = f"Возможные варианты: {', '.join(config.CURRENCYES)}"
-        message.answer(text)
+        await message.answer(text)
         return
     text = f"Ввод значения для <b>{message.text}</b> в рублях"
     markup = types.ReplyKeyboardRemove()
@@ -41,7 +41,7 @@ async def result_of_calculating(message: types.Message, state: FSMContext):
     count_of_rub = int(message.text)
     cur_name = data['currency']
     result = coin_api.get_coin_price(base=cur_name)
-    cource_base_to_currency = float(result['amount'])
+    cource_base_to_currency = float(result)
     count_of_cur = round(count_of_rub / cource_base_to_currency, 8)
     text = f"{count_of_rub} рублей = {count_of_cur} {cur_name}"
     await message.answer(text, reply_markup=menu_key.get_markup())
