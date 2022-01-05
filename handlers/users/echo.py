@@ -1,21 +1,11 @@
 from aiogram import types
-from aiogram.dispatcher import FSMContext
 
 from loader import dp
+from keyboards.default import menu_key
+from data import messages
 
 
-# Эхо хендлер, куда летят текстовые сообщения без указанного состояния
-@dp.message_handler(state=None)
+@dp.message_handler(state='*', content_types=types.ContentTypes.ANY)
 async def bot_echo(message: types.Message):
-    await message.answer(f"Эхо без состояния."
-                         f"Сообщение:\n"
-                         f"{message.text}")
-
-
-# Эхо хендлер, куда летят ВСЕ сообщения с указанным состоянием
-@dp.message_handler(state="*", content_types=types.ContentTypes.ANY)
-async def bot_echo_all(message: types.Message, state: FSMContext):
-    state = await state.get_state()
-    await message.answer(f"Эхо в состоянии <code>{state}</code>.\n"
-                         f"\nСодержание сообщения:\n"
-                         f"<code>{message}</code>")
+    markup = menu_key.get_markup()
+    await message.answer(messages.MENU_MESSAGE, reply_markup=markup)
