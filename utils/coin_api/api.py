@@ -14,7 +14,7 @@ class CoinbaseApi:
             delta_time = datetime.now() - self.bufer[request]['time']
             if delta_time <= self.bufering_time:
                 return self.bufer[request]['price']
-        price = self.client.get_buy_price(currency_pair=request)['amount']
+        price = float(self.client.get_buy_price(currency_pair=request)['amount'])
         self.bufer[request] = {'price': price, 'time': datetime.now()}
         return price
 
