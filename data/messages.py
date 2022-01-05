@@ -1,6 +1,8 @@
 from data import config
 
 
+URL_TO_OPERATOR = f'<a href="{config.URL_TO_OPERATOR}">ОПЕРАТОР</a>'
+
 INFO_ABOUT_REVIEWS = """https://t.me/Flasher_Exchange_Book"""
 
 INFO_ABOUT_SELLING_CURRENCY = """Для продажи криптовалюты обратитесь к @Flasher_boss"""
@@ -54,4 +56,14 @@ TO_PAYMENT_INFO_MESSAGE = """После успешного перевода де
 на кошелек:
 <code>{wallet_adress}</code>
 
-Если Вы перевели неправильную сумму то заявка будет считаться неоплаченной или не получили Транзакцию в течении 10 мин то Сразу сообщите об этом <a href="{URL_TO_OPERATOR}">ОПЕРАТОР</a>"""
+Если Вы перевели неправильную сумму то заявка будет считаться неоплаченной или не получили Транзакцию в течении 10 мин то Сразу сообщите об этом """ + URL_TO_OPERATOR
+
+
+HAS_NOT_PAID_IN_TIME = """От тебя не дождались реакции в течении 25 минут, заявка аннулирована.
+По всем вопросам обращаться к """ + URL_TO_OPERATOR
+
+
+REQUEST_IN_PROCESSING = """ВАША ЗАЯВКА В ОБРАБОТКЕ
+
+ОЖИДАЙТЕ ПОСТУПЛЕНИЕ СРЕДСТВ 
+на случай помощи, пишите """ + URL_TO_OPERATOR

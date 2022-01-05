@@ -6,3 +6,4 @@ class UserWaiting(StatesGroup):
     CALCULATE_INPUT_COUNT = State()
     INPUT_COUNT_OF_CURRENCY = State()
     INPUT_WALLET_ADRESS = State()
+    INPUT_IS_PAID = State()

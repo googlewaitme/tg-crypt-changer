@@ -2,10 +2,14 @@ from aiogram import types
 from aiogram.dispatcher.filters import Text
 from aiogram.dispatcher import FSMContext
 
+from datetime import datetime
+import asyncio
+
 from data import messages, config
 from loader import dp, coin_api
 from states.user_waiting import UserWaiting
-from keyboards.default import agreement_key, back_to_menu_key, payed_or_not_key
+from keyboards.default import (agreement_key, back_to_menu_key,
+                                payed_or_not_key, menu_key)
 from keyboards.inline import button_to_rules
 
 
@@ -74,12 +78,28 @@ async def check_wallet_adress(message: types.Message, state: FSMContext):
     if currency_name == 'BTC' and len(wallet_adress) > 34:
         text = f'ВВЕДИТЕ адрес {currency_name}-кошелька'
         return await send_error_message(message, text)
-    data['wallet_adress'] = wallet_adress
-    data['URL_TO_OPERATOR'] = config.URL_TO_OPERATOR
-    text = messages.TO_PAY_COUNT_MESSAGE.format(**data)
+    text = messages.TO_PAY_COUNT_MESSAGE.format(**data, wallet_adress=wallet_adress)
     await message.answer(text)
     await message.answer(config.CARD_NUMBER)
-    text = messages.TO_PAYMENT_INFO_MESSAGE.format(**data)
-    print(text)
+    text = messages.TO_PAYMENT_INFO_MESSAGE.format(**data, wallet_adress=wallet_adress)
     await message.answer(text, reply_markup=payed_or_not_key.get_markup())
-    # TODO Сделать сохранение времени
+    await state.update_data(create_time=datetime.now(), is_paid=False)
+
+    await UserWaiting.INPUT_IS_PAID.set()
+    await asyncio.sleep(15)  # ждём 25 минут # TODO ME
+    data = await state.get_data()
+    await state.finish()
+    if data['is_paid'] is False:
+        text = messages.HAS_NOT_PAID_IN_TIME.format(*data)
+        await message.answer(text, reply_markup=menu_key.get_markup())
+
+
+@dp.message_handler(
+    Text(startswith='Я оплатил'),
+    state=UserWaiting.INPUT_IS_PAID)
+async def check_transaction(message: types.Message, state: FSMContext):
+    data = await state.get_data()
+    text = messages.REQUEST_IN_PROCESSING.format(*data)
+    await message.answer(text, reply_markup=menu_key.get_markup())
+    await state.update_data(is_paid=True)
+    await state.finish()
