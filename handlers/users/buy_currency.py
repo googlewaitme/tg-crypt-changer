@@ -4,6 +4,7 @@ from aiogram.dispatcher import FSMContext
 
 from datetime import datetime
 import asyncio
+from math import ceil
 
 from data import messages, config
 from loader import dp, coin_api
@@ -55,6 +56,9 @@ async def get_currency_wallet(message: types.Message, state: FSMContext):
     else:
         text = messages.OFFER_TEMPLATE.format(currency_name=currency_name)
         return await send_error_message(message, text)
+    commission_procent = 0.08
+    curency_commision = 40 if currency_name == 'BTC' else 20
+    count_of_rub += max(100, ceil(count_of_rub * commission_procent)) + curency_commision
     count_of_currency = round(count_of_currency, 8)
     await state.update_data(
         count_of_currency=count_of_currency, count_of_rub=count_of_rub)
