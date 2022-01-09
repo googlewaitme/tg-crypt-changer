@@ -5,6 +5,7 @@ from . import calculator
 from . import buy_currency
 
 
+from . import sell_currency
 from . import referal_program
 from . import reviews
 from . import help
