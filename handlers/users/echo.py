@@ -9,3 +9,4 @@ from data import messages
 async def bot_echo(message: types.Message):
     markup = menu_key.get_markup()
     await message.answer(messages.MENU_MESSAGE, reply_markup=markup)
+
