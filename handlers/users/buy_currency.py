@@ -46,10 +46,10 @@ async def get_currency_wallet(message: types.Message, state: FSMContext):
         return await send_error_message(message, text)
     count_of_money = float(message.text)
     now_course = coin_api.get_coin_price(currency_name)
-    if count_of_money < 2:
+    if 0.001 < count_of_money < 2:
         count_of_currency = count_of_money
         count_of_rub = now_course * count_of_currency
-    elif count_of_money >= 1000:
+    elif count_of_money >= 300:
         count_of_rub = count_of_money
         count_of_currency = count_of_rub / now_course
     else:
@@ -78,18 +78,20 @@ async def check_wallet_adress(message: types.Message, state: FSMContext):
     if currency_name == 'BTC' and len(wallet_adress) > 34:
         text = f'ВВЕДИТЕ адрес {currency_name}-кошелька'
         return await send_error_message(message, text)
-    text = messages.TO_PAY_COUNT_MESSAGE.format(**data, wallet_adress=wallet_adress)
+    data['wallet_adress'] = wallet_adress
+    text = messages.TO_PAY_COUNT_MESSAGE.format(**data)
     await message.answer(text)
     await message.answer(config.CARD_NUMBER)
-    text = messages.TO_PAYMENT_INFO_MESSAGE.format(**data, wallet_adress=wallet_adress)
+    text = messages.TO_PAYMENT_INFO_MESSAGE.format(**data)
     await message.answer(text, reply_markup=payed_or_not_key.get_markup())
-    await state.update_data(create_time=datetime.now(), is_paid=False)
+    create_time = datetime.now().strftime("%d/%m/%Y, %H:%M:%S")
+    await state.update_data(create_time=create_time, is_paid=False)
 
     await UserWaiting.INPUT_IS_PAID.set()
-    await asyncio.sleep(15)  # ждём 25 минут # TODO ME
+    await asyncio.sleep(2 * 60)  # ждём 25 минут # TODO ME
     data = await state.get_data()
     await state.finish()
-    if data['is_paid'] is False:
+    if 'is_paid' in data and data['is_paid'] is False:
         text = messages.HAS_NOT_PAID_IN_TIME.format(*data)
         await message.answer(text, reply_markup=menu_key.get_markup())
 
@@ -99,7 +101,28 @@ async def check_wallet_adress(message: types.Message, state: FSMContext):
     state=UserWaiting.INPUT_IS_PAID)
 async def check_transaction(message: types.Message, state: FSMContext):
     data = await state.get_data()
+    data['username'] = message.from_user.username
+    data['user_id'] = message.from_user.id
+    text = messages.FOR_OPERATOR_ORDER_TEMPLATE.format(**data)
+    await dp.bot.send_message(config.OPERATOR_ID, text)
+
+    await state.finish()
+
     text = messages.REQUEST_IN_PROCESSING.format(*data)
     await message.answer(text, reply_markup=menu_key.get_markup())
-    await state.update_data(is_paid=True)
+
+
+@dp.message_handler(
+    Text(startswith='Отмена'),
+    state=UserWaiting.INPUT_IS_PAID
+)
+async def canceling_transaction(message: types.Message, state: FSMContext):
     await state.finish()
+    markup = menu_key.get_markup()
+    await message.answer(messages.MENU_MESSAGE, reply_markup=markup)
+
+
+@dp.message_handler(state=UserWaiting.INPUT_IS_PAID)
+async def send_question(message: types.Message, state: FSMContext):
+    await message.answer(messages.INFO_ABOUT_ACTIONS_IN_PAYMENT)
+

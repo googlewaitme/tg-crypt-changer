@@ -5,6 +5,13 @@ URL_TO_OPERATOR = f'<a href="{config.URL_TO_OPERATOR}">ОПЕРАТОР</a>'
 
 INFO_ABOUT_REVIEWS = """https://t.me/Flasher_Exchange_Book"""
 
+FOR_OPERATOR_ORDER_TEMPLATE = """Валюта: {currency_name}
+Количество монет: {count_of_currency}
+Количество рублей: {count_of_rub}
+Дата и время создания: {create_time}
+Айди пользователя: {user_id}
+Пользователь: @{username}"""
+
 INFO_ABOUT_SELLING_CURRENCY = """Для продажи криптовалюты обратитесь к @Flasher_boss"""
 
 MENU_MESSAGE = """SoNic Ex  Приветствую, я SoNic! Доставлю Ваши монеты  быстро и без потерь
@@ -27,7 +34,7 @@ OFFER_TEMPLATE = """У Нас Самый Выгодный Курс Обмена
 После 2-го обмена по кругу 
 
 На какую сумму Вы хотите купить {currency_name}?
-(Напишите сумму : от 0.0001 {currency_name} или от 1000 руб )
+(Напишите сумму : от 0.001 {currency_name} или от 300 руб )
 """
 
 
@@ -67,3 +74,6 @@ REQUEST_IN_PROCESSING = """ВАША ЗАЯВКА В ОБРАБОТКЕ
 
 ОЖИДАЙТЕ ПОСТУПЛЕНИЕ СРЕДСТВ 
 на случай помощи, пишите """ + URL_TO_OPERATOR
+
+
+INFO_ABOUT_ACTIONS_IN_PAYMENT = """Нажмите кнопку <b>Отмена</b> или <b>Я оплатил</b>"""
