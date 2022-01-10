@@ -26,9 +26,10 @@ async def send_agreement(message: types.Message, state: FSMContext):
     currency_name = message.text.split()[1]
     await message.answer(messages.AGREEMENT, reply_markup=markup)
     await state.update_data(currency_name=currency_name)
+    await UserWaiting.INPUT_AGREEMENT.set()
 
 
-@dp.message_handler(Text(['Я СОГЛАШАЮСЬ', 'Я НЕ СОГЛАШАЮСЬ']))
+@dp.message_handler(Text('Я СОГЛАШАЮСЬ'), state=UserWaiting.INPUT_AGREEMENT)
 async def send_offer(message: types.Message, state: FSMContext):
     markup = back_to_menu_key.get_markup()
     data = await state.get_data()
@@ -36,6 +37,11 @@ async def send_offer(message: types.Message, state: FSMContext):
     text = messages.OFFER_TEMPLATE.format(currency_name=currency_name)
     await message.answer(text, reply_markup=markup)
     await UserWaiting.INPUT_COUNT_OF_CURRENCY.set()
+
+
+@dp.message_handler(state=UserWaiting.INPUT_AGREEMENT)
+async def send_menu_if_not_agreement(message: types.Message, state: FSMContext):
+    await canceling_transaction(message, state)
 
 
 @dp.message_handler(state=UserWaiting.INPUT_COUNT_OF_CURRENCY)
@@ -56,7 +62,7 @@ async def get_currency_wallet(message: types.Message, state: FSMContext):
     else:
         text = messages.OFFER_TEMPLATE.format(currency_name=currency_name)
         return await send_error_message(message, text)
-    commission_procent = 0.08
+    commission_procent = 0.08  # TODO ME
     curency_commision = 40 if currency_name == 'BTC' else 20
     count_of_rub += max(100, ceil(count_of_rub * commission_procent)) + curency_commision
     count_of_currency = round(count_of_currency, 8)
