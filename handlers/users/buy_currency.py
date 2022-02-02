@@ -135,4 +135,3 @@ async def canceling_transaction(message: types.Message, state: FSMContext):
 @dp.message_handler(state=UserWaiting.INPUT_IS_PAID)
 async def send_question(message: types.Message, state: FSMContext):
     await message.answer(messages.INFO_ABOUT_ACTIONS_IN_PAYMENT)
-
