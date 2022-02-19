@@ -1,4 +1,5 @@
 from environs import Env
+import shelve
 
 # Теперь используем вместо библиотеки python-dotenv библиотеку environs
 env = Env()
@@ -26,3 +27,17 @@ CARD_NUMBER = env.str('CARD_NUMBER')
 # ~~~~~~~~~~~~~~~~~~~~~~~~
 
 CURRENCYES = ['BTC', "LTC"]
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~ Важные переменные ~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~
+states = shelve.open('app.states')
+defaults = {
+    'card_number': CARD_NUMBER,
+    'currency_in_work': ['BTC', 'LTC'],
+    'remaining_BTC': 0,
+    'remaining_LTC': 0,
+}
+for key in defaults:
+    if key not in states:
+        states[key] = defaults[key]
