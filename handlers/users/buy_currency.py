@@ -22,8 +22,12 @@ async def send_error_message(message: types.Message, old_text: str):
 
 @dp.message_handler(Text(['Купить LTC', 'Купить BTC']))
 async def send_agreement(message: types.Message, state: FSMContext):
-    markup = agreement_key.get_markup()
     currency_name = message.text.split()[1]
+    if currency_name not in config.states['currency_in_work']:
+        markup = button_to_support.get_markup()
+        await message.answer(messages.CURRENCY_NOT_IN_WORK)
+        return
+    markup = agreement_key.get_markup()
     await message.answer(messages.AGREEMENT, reply_markup=markup)
     await state.update_data(currency_name=currency_name)
     await UserWaiting.INPUT_AGREEMENT.set()
