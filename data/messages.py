@@ -1,6 +1,8 @@
 from data import config
 
 
+CANCEL_BUTTON_TEXT = 'Отмена'
+
 URL_TO_OPERATOR = f'<a href="{config.URL_TO_OPERATOR}">ОПЕРАТОР</a>'
 
 INFO_ABOUT_REVIEWS = """https://t.me/Flasher_Exchange_Book"""
