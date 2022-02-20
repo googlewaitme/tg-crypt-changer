@@ -10,8 +10,8 @@ from data import messages, config
 from loader import dp, coin_api
 from states.user_waiting import UserWaiting
 from keyboards.default import (agreement_key, back_to_menu_key,
-                                payed_or_not_key, menu_key)
-from keyboards.inline import button_to_rules
+                               payed_or_not_key, menu_key)
+from keyboards.inline import button_to_rules, button_to_support
 
 
 async def send_error_message(message: types.Message, old_text: str):
