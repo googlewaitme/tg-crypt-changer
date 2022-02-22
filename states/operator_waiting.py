@@ -8,6 +8,8 @@ class ManualTransaction(StatesGroup):
 
 
 class OperatorWaiting(StatesGroup):
+    INPUT_USER_ID_FOR_BAN = State()
+    INPUT_BAN_STATUS_CONFIRMATION = State()
     INPUT_CREDIT_CARD = State()
     CALCULATE_INPUT_COUNT = State()
     CALCULATE_CHOOSE_CURRENCY = State()

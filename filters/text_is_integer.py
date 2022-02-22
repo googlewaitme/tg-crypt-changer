@@ -3,7 +3,7 @@ from aiogram import types
 
 
 class TextIsInt(BoundFilter):
-    key = 'text_is_float'
+    key = 'text_is_int'
 
     def __init__(self, text_is_int: bool):
         self.text_is_int = text_is_int
