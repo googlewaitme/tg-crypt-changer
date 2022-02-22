@@ -2,8 +2,8 @@ from aiogram import types
 from aiogram.dispatcher.filters import Text
 from aiogram.dispatcher import FSMContext
 
-from loader import dp, coin_api
-from data import config
+from loader import dp, coin_api, currencyes
+from data import config, messages
 from states.operator_waiting import OperatorWaiting
 from keyboards.default import choose_currency, operator_menu_key
 
@@ -31,17 +31,27 @@ async def ask_about_count(message: types.Message, state: FSMContext):
     await OperatorWaiting.CALCULATE_INPUT_COUNT.set()
 
 
-@dp.message_handler(state=OperatorWaiting.CALCULATE_INPUT_COUNT)
+@dp.message_handler(
+    text_is_float=False,
+    state=OperatorWaiting.CALCULATE_INPUT_COUNT)
+async def error_of_calculating(message: types.Message):
+    await message.answer(messages.INPUTING_ERROR_MESSAGE)
+
+
+@dp.message_handler(
+    text_is_float=True,
+    state=OperatorWaiting.CALCULATE_INPUT_COUNT)
 async def result_of_calculating(message: types.Message, state: FSMContext):
-    if not message.text.isdigit():
-        await ask_about_currency(message, state)
-        return
     data = await state.get_data()
     await state.finish()
-    count_of_rub = int(message.text)
-    cur_name = data['currency']
-    result = coin_api.get_coin_price(base=cur_name)
-    cource_base_to_currency = float(result)
-    count_of_cur = round(count_of_rub / cource_base_to_currency, 8)
-    text = f"{count_of_rub} рублей = {count_of_cur} {cur_name}"
+    amount = float(message.text)
+    for cur in currencyes:
+        if cur.name == data['currency']:
+            currency = cur
+            break
+    currency_amount, native_amount = currency.get_amounts(amount)
+    commission = currency.get_commision(native_amount)
+    endly_native_amount = native_amount + commission
+    text = f"{endly_native_amount} рублей = {currency_amount} {cur.name}\n"
+    text += f"Коммиссия - {commission}, себестоимость - {native_amount}"
     await message.answer(text, reply_markup=operator_menu_key.get_markup())
