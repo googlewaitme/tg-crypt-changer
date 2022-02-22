@@ -8,7 +8,7 @@ from states.operator_waiting import OperatorWaiting
 from keyboards.default import choose_currency, operator_menu_key
 
 
-@dp.message_handler(Text(startswith='🧮'))
+@dp.message_handler(Text(startswith='🧮'), is_operator=True)
 async def ask_about_currency(message: types.Message, state: FSMContext):
     await OperatorWaiting.CALCULATE_CHOOSE_CURRENCY.set()
     text = 'Выбор валюты:'
