@@ -29,6 +29,8 @@ class Transaction(BaseModel):
     create_date = DateTimeField()
     is_paid = BooleanField(default=False)
     is_operator_checked = BooleanField(default=False)
+    wallet_adress = CharField(max_length=200, null=True)
+    status = CharField(max_length=200, default='pending')
 
 
 if __name__ == '__main__':
