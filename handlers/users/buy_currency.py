@@ -5,6 +5,7 @@ from aiogram.dispatcher import FSMContext
 from datetime import datetime
 import asyncio
 from math import ceil
+import uuid
 
 from data import messages, config
 from loader import dp, coin_api
@@ -70,8 +71,12 @@ async def get_currency_wallet(message: types.Message, state: FSMContext):
     curency_commision = 40 if currency_name == 'BTC' else 20
     count_of_rub += max(100, ceil(count_of_rub * commission_procent)) + curency_commision
     count_of_currency = round(count_of_currency, 8)
+    random_salt = uuid.uuid4()
     await state.update_data(
-        count_of_currency=count_of_currency, count_of_rub=count_of_rub)
+        count_of_currency=count_of_currency,
+        count_of_rub=count_of_rub,
+        random_salt=random_salt
+    )
     data = await state.get_data()
     text = messages.ITOG_TEMPLATE.format(**data)
     inline_markup = button_to_rules.get_markup()
@@ -79,6 +84,12 @@ async def get_currency_wallet(message: types.Message, state: FSMContext):
     text = f'ВВЕДИТЕ адрес {currency_name}-кошелька'
     await message.answer(text)
     await UserWaiting.INPUT_WALLET_ADRESS.set()
+    await asyncio.sleep(2 * 60)  # ждём 25 минут # TODO ME
+    data = await state.get_data()
+    if 'random_salt' in data and data['random_salt'] == random_salt:
+        text = messages.HAS_NOT_PAID_IN_TIME.format(*data)
+        await message.answer(text, reply_markup=menu_key.get_markup())
+        await state.finish()
 
 
 @dp.message_handler(state=UserWaiting.INPUT_WALLET_ADRESS)
@@ -92,22 +103,27 @@ async def check_wallet_adress(message: types.Message, state: FSMContext):
     if currency_name == 'BTC' and len(wallet_adress) > 34:
         text = f'ВВЕДИТЕ адрес {currency_name}-кошелька'
         return await send_error_message(message, text)
-    data['wallet_adress'] = wallet_adress
+    await state.update_data(wallet_adress=wallet_adress)
+    data = await state.get_data()
     text = messages.TO_PAY_COUNT_MESSAGE.format(**data)
     await message.answer(text)
     await message.answer(config.CARD_NUMBER)
     text = messages.TO_PAYMENT_INFO_MESSAGE.format(**data)
     await message.answer(text, reply_markup=payed_or_not_key.get_markup())
     create_time = datetime.now().strftime("%d/%m/%Y, %H:%M:%S")
-    await state.update_data(create_time=create_time, is_paid=False)
+    random_salt = uuid.uuid4()
+    await state.update_data(
+        create_time=create_time,
+        is_paid=False,
+        random_salt=random_salt)
 
     await UserWaiting.INPUT_IS_PAID.set()
-    await asyncio.sleep(2 * 60)  # ждём 25 минут # TODO ME
+    await asyncio.sleep(2 * 60)  # TODO ME
     data = await state.get_data()
-    await state.finish()
-    if 'is_paid' in data and data['is_paid'] is False:
+    if 'random_salt' in data and data['random_salt'] == random_salt:
         text = messages.HAS_NOT_PAID_IN_TIME.format(*data)
         await message.answer(text, reply_markup=menu_key.get_markup())
+        await state.finish()
 
 
 @dp.message_handler(

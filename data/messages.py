@@ -9,6 +9,7 @@ URL_TO_OPERATOR = f'<a href="{config.URL_TO_OPERATOR}">ОПЕРАТОР</a>'
 INFO_ABOUT_REVIEWS = """https://t.me/Flasher_Exchange_Book"""
 
 FOR_OPERATOR_ORDER_TEMPLATE = """Валюта: {currency_name}
+Кошелёк: <code>{wallet_adress}</code>
 Количество монет: {count_of_currency}
 Количество рублей: {count_of_rub}
 Дата и время создания: {create_time}
