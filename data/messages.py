@@ -2,6 +2,7 @@ from data import config
 
 
 CANCEL_BUTTON_TEXT = 'Отмена'
+CONFIRMATION_BUTTON_TEXT = 'Подтверждаю'
 
 URL_TO_OPERATOR = f'<a href="{config.URL_TO_OPERATOR}">ОПЕРАТОР</a>'
 
@@ -57,6 +58,12 @@ TO_PAY_COUNT_MESSAGE = """<b>Сумма к оплате:</b> {count_of_rub} ру
 <b>Заявка действительна:</b> 25 минут
 
 РЕКВИЗИТЫ"""
+
+
+OPERATOR_MANUALLY_ITOG = """Подтвердите перевод:
+<b>{currency_name}:</b> {currency_amount}
+<b>Рубли:</b> {native_amount}
+<b>Адрес:</b> {wallet_adress}"""
 
 
 TO_PAYMENT_INFO_MESSAGE = """После успешного перевода денег по указанным реквизитам нажмите на кнопку « Я оплатил(а)» или же Вы можете отменить данную заявку нажав на кнопку « Отменить заявку»
