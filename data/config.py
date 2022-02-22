@@ -1,5 +1,6 @@
 from environs import Env
 import shelve
+from utils.coin_api.currencyes import BitcoinCurrency, LitcoinCurrency
 
 # Теперь используем вместо библиотеки python-dotenv библиотеку environs
 env = Env()
