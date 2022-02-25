@@ -1,4 +1,5 @@
 from utils.coin_api.base_currency import BaseCurrency
+from data import config
 
 
 class LitcoinCurrency(BaseCurrency):
@@ -8,5 +9,6 @@ class LitcoinCurrency(BaseCurrency):
             long_name='litcoin',
             currency_commission=20,
             commission_procent=0.1,
-            coin_api=coin_api
+            coin_api=coin_api,
+            resource_id=config.LTC_RESOURCE_ID
         )

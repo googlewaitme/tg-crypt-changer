@@ -1,4 +1,5 @@
 from utils.coin_api.base_currency import BaseCurrency
+from data import config
 
 
 class BitcoinCurrency(BaseCurrency):
@@ -8,5 +9,6 @@ class BitcoinCurrency(BaseCurrency):
             long_name='bitcoin',
             currency_commission=40,
             commission_procent=0.1,
-            coin_api=coin_api
+            coin_api=coin_api,
+            resource_id=config.BTC_RESOURCE_ID
         )

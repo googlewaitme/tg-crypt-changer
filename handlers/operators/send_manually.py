@@ -1,4 +1,4 @@
-from loader import dp, currencyes, coin_api
+from loader import dp, get_currency, coin_api
 
 from datetime import datetime
 
@@ -52,10 +52,7 @@ async def ask_confirmation_of_transaction(
     currency_name = data['currency_name']
     wallet_adress = data['wallet_adress']
 
-    for cur in currencyes:
-        if cur.name == data['currency_name']:
-            currency = cur
-            break
+    currency = get_currency[currency_name]
     amount = float(message.text)
     currency_amount, native_amount = currency.get_amounts(amount)
 
@@ -97,6 +94,7 @@ async def make_transaction(message: types.Message, state: FSMContext):
 
 
 async def create_transaction(data, message):
+    currency = get_currency[data['currency_name']]
     user = User.get(User.telegram_id == message.from_user.id)
     transaction = Transaction.create(user=user, **data)
-    # coin_api.send_money(transaction)
+    coin_api.send_money(transaction=transaction, currency=currency)

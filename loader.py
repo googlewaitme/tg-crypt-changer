@@ -13,7 +13,11 @@ bot = Bot(token=config.BOT_TOKEN, parse_mode=types.ParseMode.HTML)
 storage = MemoryStorage()
 dp = Dispatcher(bot, storage=storage)
 coin_api = CoinbaseApi(config.COINBASE_API_KEY, config.COINBASE_API_SECRET)
-currencyes = [
-    BitcoinCurrency(coin_api),
-    LitcoinCurrency(coin_api),
-]
+
+
+get_currency = {
+    'BTC': BitcoinCurrency(coin_api),
+    'LTC': LitcoinCurrency(coin_api),
+}
+
+currencyes = get_currency.values()

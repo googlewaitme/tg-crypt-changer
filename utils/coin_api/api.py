@@ -20,19 +20,37 @@ class CoinbaseApi:
         self.bufer[request] = {'price': price, 'time': datetime.now()}
         return price
 
+    def _get_paginated_items(self, api_method, limit=300):
+        """Generic getter for paginated items"""
+        all_items = []
+        starting_after = None
+        while True:
+            items = api_method(limit=limit, starting_after=starting_after)
+            if items.pagination.next_starting_after is not None:
+                starting_after = items.pagination.next_starting_after
+                all_items += items.data
+            else:
+                all_items += items.data
+                break
+        return all_items
+
     def get_resurces(self):
         accounts = self.get_accounts()
         text = 'Остатки:\n'
-        for account in accounts['data']:
-            balance = str(account['balance'])
-            native_balance = str(account['native_balance'])
-            text += f"{balance} : {native_balance}\n"
+        for account in accounts:
+            balance = account['balance']
+            native_balance = account['native_balance']
+            if float(balance['amount']) > 0:
+                text += f"{balance} : {native_balance}\n"
         return text
 
-    def send_money(self, transaction):
-        resource_id = self.get_resource_id(transaction.currency_name)
+    def get_account(self, resource_id):
+        return self.client.get_account(resource_id)
+
+    def send_money(self, transaction, currency):
         tx = self.client.send_money(
-            resource_id,
+            currency.resource_id,
+            currency=currency.name,
             to=transaction.wallet_adress,
             amount=transaction.currency_count,
             idem=str(uuid.uuid4())
@@ -42,8 +60,4 @@ class CoinbaseApi:
         return self.client.get_current_user()
 
     def get_accounts(self):
-        return self.client.get_accounts()
-
-    def get_resource_id(self, currency='BTC'):
-        # TODO ME
-        return 'lala'
+        return self._get_paginated_items(api_method=self.client.get_accounts)
