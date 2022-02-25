@@ -5,7 +5,7 @@ from aiogram.dispatcher.filters import Text
 
 from keyboards.inline import currencyes_tumbler_markup
 from keyboards.inline.currencyes_tumbler_markup import tumbler_cb
-from data.config import states
+from data.config import states, CURRENCYES
 
 
 @dp.message_handler(Text('🕹️'))
@@ -13,6 +13,16 @@ async def send_currencyes(message: types.Message):
     await message.answer(
         "Нажатием включите или отключите криптовалюты",
         reply_markup=currencyes_tumbler_markup.get_markup())
+
+
+@dp.callback_query_handler(tumbler_cb.filter(currency_name='all'))
+async def all_tumbler_status(query: types.CallbackQuery, callback_data: dict):
+    if callback_data['in_work'] == 'True':
+        states['currency_in_work'] = CURRENCYES.copy()
+    else:
+        states['currency_in_work'] = []
+    await update_tumbler_message(query)
+    await query.answer()
 
 
 @dp.callback_query_handler(tumbler_cb.filter(in_work='True'))
