@@ -8,7 +8,7 @@ from keyboards.inline.currencyes_tumbler_markup import tumbler_cb
 from data.config import states, CURRENCYES
 
 
-@dp.message_handler(Text('🕹️'))
+@dp.message_handler(Text('🕹️'), is_operator=True)
 async def send_currencyes(message: types.Message):
     await message.answer(
         "Нажатием включите или отключите криптовалюты",
