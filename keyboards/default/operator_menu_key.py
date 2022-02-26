@@ -4,10 +4,10 @@ from aiogram.types import KeyboardButton, ReplyKeyboardMarkup
 def get_markup():
     markup = ReplyKeyboardMarkup(resize_keyboard=True)
     markup.row(
-        KeyboardButton('СВ'),
+        KeyboardButton('CB'),
         KeyboardButton('BTC📥'),
         KeyboardButton('LTC📥'),
-        KeyboardButton('СВ🎏'),
+        KeyboardButton('CB🎏'),
     )
     markup.row(
         KeyboardButton('🧮'),

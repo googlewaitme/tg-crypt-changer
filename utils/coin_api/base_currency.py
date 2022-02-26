@@ -34,6 +34,23 @@ class BaseCurrency():
         balance = f"{self.name} {amount}"
         return balance.ljust(15) + " : " + str(account['native_balance'])
 
+    def get_transactions(self):
+        transactions = self.coin_api.get_transactions(self.resource_id)
+        text = "Транзакции💸\n"
+        for transaction in transactions:
+            text += self._make_text_from_transaction(transaction)
+            text += '\n-----\n'
+        return text
+
+    def _make_text_from_transaction(self, transaction):
+        text = '\n' + transaction['details']['header']
+        text += '\nСтатус: ' + transaction['status']
+        print(transaction['network'])
+        if 'to' in transaction:
+            text += '\nКошелёк: ' + transaction['to']['address']
+        text += '\nДата: ' + transaction['created_at']
+        return text
+
     def get_native_amount(self, currency_amount):
         self.update_course()
         native_amount = self.now_course * currency_amount

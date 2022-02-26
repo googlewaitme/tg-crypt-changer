@@ -44,6 +44,9 @@ class CoinbaseApi:
                 text += f"{balance} : {native_balance}\n"
         return text
 
+    def get_transactions(self, resource_id):
+        return self.client.get_transactions(resource_id)['data']
+
     def get_account(self, resource_id):
         return self.client.get_account(resource_id)
 
