@@ -16,6 +16,9 @@ COINBASE_API_KEY = env.str('COINBASE_API_KEY')
 # ~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~ Доп.штуки        ~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~
+URL_TO_MANAGER = env.str('URL_TO_MANAGER')
+MANAGER_ID = env.int('MANAGER_ID')
+
 URL_TO_RULES = env.str('URL_TO_RULES')
 BOSS_ID = env.int('BOSS_ID')
 URL_TO_BOSS = env.str('URL_TO_BOSS')
