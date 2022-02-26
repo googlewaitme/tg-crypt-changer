@@ -10,4 +10,4 @@ class OperatorFilter(BoundFilter):
         self.is_operator = is_operator
 
     async def check(self, message: types.Message):
-        return message.from_user.id == OPERATOR_ID
+        return self.is_operator is (message.from_user.id == OPERATOR_ID)
