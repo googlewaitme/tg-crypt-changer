@@ -1,7 +1,7 @@
 from . import menu
 
 from . import reserve
-from . import cashbot
+from . import cashbox
 from . import history_transactions
 from . import lottery
 from . import mailing

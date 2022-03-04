@@ -6,7 +6,7 @@ from aiogram import types
 from aiogram.dispatcher.filters import Text
 from aiogram.dispatcher import FSMContext
 
-from utils.db_api.models import User, Transaction
+from utils.db_api.models import Cashbox, User, Transaction
 from states.operator_waiting import ManualTransaction
 from keyboards.default import (confirmation_key,
                                operator_menu_key,
@@ -96,5 +96,11 @@ async def make_transaction(message: types.Message, state: FSMContext):
 async def create_transaction(data, message):
     currency = get_currency[data['currency_name']]
     user = User.get(User.telegram_id == message.from_user.id)
-    transaction = Transaction.create(user=user, **data)
-    coin_api.send_money(transaction=transaction, currency=currency)
+    cashbox, created = Cashbox.get_or_create(closed=None)
+    transaction = Transaction.create(
+        user=user,
+        cashbox=cashbox,
+        is_operator_checked=True,
+        is_paid=True,
+        **data)
+    # coin_api.send_money(transaction=transaction, currency=currency)
