@@ -7,7 +7,7 @@ database = SqliteDatabase('app.db')
 
 def create_tables():
     with database:
-        database.create_tables([User, Transaction])
+        database.create_tables([User, Transaction, Cashbox])
 
 
 class BaseModel(Model):
@@ -30,7 +30,7 @@ class Cashbox(BaseModel):
 
 class Transaction(BaseModel):
     user = ForeignKeyField(User, backref='transactions')
-    cashbox = ForeignKeyField(Cashbox, backref='transactions')
+    cashbox = ForeignKeyField(Cashbox, null=True, backref='transactions')
     currency_name = CharField(max_length=10)
     currency_count = FloatField()
     rub_count = FloatField()
