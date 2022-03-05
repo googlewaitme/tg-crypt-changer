@@ -12,3 +12,6 @@ class BitcoinCurrency(BaseCurrency):
             coin_api=coin_api,
             resource_id=config.BTC_RESOURCE_ID
         )
+
+    def check_wallet_adress(self, wallet_adress):
+        return len(wallet_adress) <= 34

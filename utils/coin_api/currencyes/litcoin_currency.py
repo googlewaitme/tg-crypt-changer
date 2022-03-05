@@ -12,3 +12,6 @@ class LitcoinCurrency(BaseCurrency):
             coin_api=coin_api,
             resource_id=config.LTC_RESOURCE_ID
         )
+
+    def check_wallet_adress(self, wallet_adress):
+        return wallet_adress[0] in 'ML3l' and len(wallet_adress) > 32
