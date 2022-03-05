@@ -44,6 +44,12 @@ class CoinbaseApi:
                 text += f"{balance} : {native_balance}\n"
         return text
 
+    def print_acount_info_by_name(self, name):
+        accounts = self.get_accounts()
+        for account in accounts:
+            if name in account['currency']:
+                print(account)
+
     def get_transactions(self, resource_id):
         return self.client.get_transactions(resource_id)['data']
 
