@@ -89,6 +89,11 @@ REQUEST_IN_PROCESSING = """ВАША ЗАЯВКА В ОБРАБОТКЕ
 INFO_ABOUT_ACTIONS_IN_PAYMENT = """Нажмите кнопку <b>Отмена</b> или <b>Я оплатил</b>"""
 
 
+TRANSACTION_IS_PASSED = """Транзакция подтверждена. Ожидайте поступление средств"""
+
+TRANSACTION_IS_CANCELED = """Транзакция отклонена."""
+
+
 BANNED_MESSAGE = """Вы заблокированы. Разблокировка у """ + URL_TO_OPERATOR
 
 

@@ -1,6 +1,7 @@
 from . import menu
 
 from . import send_manually
+from . import send_from_user_form
 
 from . import set_ban
 from . import set_credit_card
