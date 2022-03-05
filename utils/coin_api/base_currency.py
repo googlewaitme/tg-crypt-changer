@@ -64,7 +64,9 @@ class BaseCurrency():
     def update_course(self):
         self.now_course = self.coin_api.get_coin_price(self.name)
 
-    def get_commision(self, count_of_rub):
-        commission = max(100, ceil(count_of_rub * self.commission_procent))
+    def get_commision(self, count_of_rub, procent=None):
+        if procent is None:
+            procent = self.commission_procent
+        commission = max(100, ceil(count_of_rub * procent))
         commission += self.currency_commission
         return commission

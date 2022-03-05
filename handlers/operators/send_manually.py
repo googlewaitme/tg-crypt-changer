@@ -11,6 +11,7 @@ from states.operator_waiting import ManualTransaction
 from keyboards.default import (confirmation_key,
                                operator_menu_key,
                                back_to_menu_key)
+from keyboards.operator.default import procents_key
 from data import messages
 
 
@@ -28,12 +29,33 @@ async def ask_wallet_adress(message: types.Message, state: FSMContext):
 
 @dp.message_handler(state=ManualTransaction.INPUT_WALLET_ADRESS)
 async def ask_count_of_currency(message: types.Message, state: FSMContext):
+    text = f'Введите процентную ставку(можно ввести с клавиатуры)'
+    markup = procents_key.get_markup()
+    await message.answer(text, reply_markup=markup)
+    await ManualTransaction.INPUT_TRANSACTION_PROCENT.set()
+    await state.update_data(wallet_adress=message.text)
+
+
+@dp.message_handler(
+    state=ManualTransaction.INPUT_TRANSACTION_PROCENT,
+    text_is_positive_int=False
+)
+async def send_fucking_message(message: types.Message):
+    text = 'Число должно быть целым и больше или равно 0'
+    await message.answer(text)
+
+
+@dp.message_handler(
+    state=ManualTransaction.INPUT_TRANSACTION_PROCENT,
+    text_is_positive_int=True)
+async def set_transaction_procent(message: types.Message, state: FSMContext):
     data = await state.get_data()
     currency_name = data['currency_name']
     text = f'Введите количество {currency_name}, которое хотите отправить'
-    await message.answer(text)
+    await message.answer(text, reply_markup=types.ReplyKeyboardRemove())
     await ManualTransaction.INPUT_COUNT_OF_CURRENCY.set()
-    await state.update_data(wallet_adress=message.text)
+    await state.update_data(procent=int(message.text))
+    data = await state.get_data()
 
 
 @dp.message_handler(
@@ -61,22 +83,22 @@ async def ask_confirmation_of_transaction(
         await message.answer(text)
         return
 
-    commission = currency.get_commision(native_amount)
-    endly_native_amount = commission + native_amount
+    comission = currency.get_commision(native_amount, data['procent'])
+    endly_native_amount = comission + native_amount
     markup = confirmation_key.get_markup()
     text = messages.OPERATOR_MANUALLY_ITOG.format(
         currency_name=currency_name,
-        native_amount=endly_native_amount,
-        currency_amount=currency_amount,
+        rub_count=endly_native_amount,
+        currency_count=currency_amount,
         wallet_adress=wallet_adress,
-        commission=commission)
+        comission=comission)
 
     await message.answer(text, reply_markup=markup)
     await ManualTransaction.CONFIRMATION.set()
     await state.update_data(
         currency_count=currency_amount,
         rub_count=endly_native_amount,
-        comission_count=commission,
+        comission_count=comission,
         create_date=datetime.now()
     )
 

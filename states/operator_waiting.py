@@ -4,6 +4,7 @@ from aiogram.dispatcher.filters.state import StatesGroup, State
 class ManualTransaction(StatesGroup):
     INPUT_COUNT_OF_CURRENCY = State()
     INPUT_WALLET_ADRESS = State()
+    INPUT_TRANSACTION_PROCENT = State()
     CONFIRMATION = State()
 
 

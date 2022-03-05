@@ -64,6 +64,7 @@ TO_PAY_COUNT_MESSAGE = """<b>Сумма к оплате:</b> {rub_count} руб
 OPERATOR_MANUALLY_ITOG = """Подтвердите перевод:
 <b>{currency_name}:</b> {currency_count:.8f}
 <b>Рубли:</b> {rub_count}
+<b>Комиссия:</b> {comission}
 <b>Адрес:</b> {wallet_adress}"""
 
 
