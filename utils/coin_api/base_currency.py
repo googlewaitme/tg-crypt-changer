@@ -45,7 +45,6 @@ class BaseCurrency():
     def _make_text_from_transaction(self, transaction):
         text = '\n' + transaction['details']['header']
         text += '\nСтатус: ' + transaction['status']
-        print(transaction['network'])
         if 'to' in transaction:
             text += '\nКошелёк: ' + transaction['to']['address']
         text += '\nДата: ' + transaction['created_at']

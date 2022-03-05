@@ -10,7 +10,7 @@ INFO_ABOUT_REVIEWS = """https://t.me/Flasher_Exchange_Book"""
 
 FOR_OPERATOR_ORDER_TEMPLATE = """Валюта: {currency_name}
 Кошелёк: <code>{wallet_adress}</code>
-Количество монет: {currency_count}
+Количество монет: {currency_count:.8f}
 Количество рублей: {rub_count}
 Дата и время создания: {create_time}
 Айди пользователя: {user_id}
@@ -43,7 +43,7 @@ OFFER_TEMPLATE = """У Нас Самый Выгодный Курс Обмена
 
 
 ITOG_TEMPLATE = """Сумма к оплате составит: {rub_count} рублей 
-Вы получите: {currency_count} {currency_name}
+Вы получите: {currency_count:.8f} {currency_name}
 
 Оплата принимается на карту  банка, QIWI кошелёк любым удобным для Вас способом (с QIWI и других ЭПС, карты любого банка и терминалов)
 
@@ -62,14 +62,14 @@ TO_PAY_COUNT_MESSAGE = """<b>Сумма к оплате:</b> {rub_count} руб
 
 
 OPERATOR_MANUALLY_ITOG = """Подтвердите перевод:
-<b>{currency_name}:</b> {currency_count}
+<b>{currency_name}:</b> {currency_count:.8f}
 <b>Рубли:</b> {rub_count}
 <b>Адрес:</b> {wallet_adress}"""
 
 
 TO_PAYMENT_INFO_MESSAGE = """После успешного перевода денег по указанным реквизитам нажмите на кнопку « Я оплатил(а)» или же Вы можете отменить данную заявку нажав на кнопку « Отменить заявку»
 
-Покупка: {currency_count} {currency_name}
+Покупка: {currency_count:.8f} {currency_name}
 на кошелек:
 <code>{wallet_adress}</code>
 
