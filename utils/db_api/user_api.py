@@ -29,3 +29,12 @@ class UserApi():
         query = User.update(last_visit_date=datetime.now())
         query = query.where(User.telegram_id == self.telegram_id)
         query.execute()
+
+    def get_referal_token(self):
+        user = self.get()
+        return user.referal_token
+
+    def set_referal_token(self, referal_token):
+        user = self.get()
+        user.referal_token = referal_token
+        user.save()
