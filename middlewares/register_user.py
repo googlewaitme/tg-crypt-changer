@@ -8,4 +8,5 @@ class RegisterUser(BaseMiddleware):
         user = UserApi(telegram_id=message.from_user.id)
         if not user.is_exist():
             user.create()
-
+        else:
+            user.set_last_visited()

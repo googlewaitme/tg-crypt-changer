@@ -17,9 +17,15 @@ class UserApi():
         User.create(
             telegram_id=self.telegram_id,
             is_baned=False,
-            join_date=datetime.now()
+            join_date=datetime.now(),
+            last_visit_date=datetime.now()
         )
 
     def is_baned(self):
         user = User.get(User.telegram_id == self.telegram_id)
         return user.is_baned
+
+    def set_last_visited(self):
+        query = User.update(last_visit_date=datetime.now())
+        query = query.where(User.telegram_id == self.telegram_id)
+        query.execute()

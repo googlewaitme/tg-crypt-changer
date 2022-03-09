@@ -19,6 +19,8 @@ class User(BaseModel):
     telegram_id = IntegerField(unique=True)
     is_baned = BooleanField(default=False)
     join_date = DateTimeField()
+    last_visit_date = DateTimeField()
+    referal_token = CharField(max_length=100, null=True)
 
 
 class Cashbox(BaseModel):
