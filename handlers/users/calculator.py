@@ -2,7 +2,7 @@ from aiogram import types
 from aiogram.dispatcher.filters import Text
 from aiogram.dispatcher import FSMContext
 
-from loader import dp, coin_api
+from loader import dp, get_currency
 from data import config
 from states.user_waiting import UserWaiting
 from keyboards.default import choose_currency, menu_key
@@ -38,10 +38,12 @@ async def result_of_calculating(message: types.Message, state: FSMContext):
         return
     data = await state.get_data()
     await state.finish()
-    count_of_rub = int(message.text)
-    cur_name = data['currency']
-    result = coin_api.get_coin_price(base=cur_name)
-    cource_base_to_currency = float(result)
-    count_of_cur = round(count_of_rub / cource_base_to_currency, 8)
-    text = f"{count_of_rub} рублей = {count_of_cur} {cur_name}"
+    native_amount = int(message.text)
+    currency_name = data['currency']
+    currency = get_currency[currency_name]
+    currency_amount = currency.get_currency_amount(native_amount)
+    commission = currency.get_commision(native_amount)
+    text = f"{native_amount + commission} рублей ="
+    text += f" {currency_amount} {currency_name}"
+    text += f'\nКоммисия: {commission}'
     await message.answer(text, reply_markup=menu_key.get_markup())
