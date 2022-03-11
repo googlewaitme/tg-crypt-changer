@@ -18,7 +18,7 @@ async def send_money(query: types.CallbackQuery, callback_data: dict):
     transaction.save()
     text = messages.TRANSACTION_IS_PASSED
     currency = get_currency[transaction.currency_name]
-    # coin_api.send_money(transaction=transaction, currency=currency)
+    coin_api.send_money(transaction=transaction, currency=currency)
     await query.message.edit_reply_markup(types.InlineKeyboardMarkup())
     await query.message.answer('Перевод совершён!')
     await alert_to_user(user_id, text)

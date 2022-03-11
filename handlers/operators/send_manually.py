@@ -125,4 +125,4 @@ async def create_transaction(data, message):
         is_operator_checked=True,
         is_paid=True,
         **data)
-    # coin_api.send_money(transaction=transaction, currency=currency)
+    coin_api.send_money(transaction=transaction, currency=currency)

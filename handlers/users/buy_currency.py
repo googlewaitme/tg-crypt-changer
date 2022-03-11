@@ -70,6 +70,12 @@ async def get_currency_wallet(message: types.Message, state: FSMContext):
     currency = get_currency[currency_name]
     count_of_money = float(message.text)
     currency_amount, native_amount = currency.get_amounts(count_of_money)
+
+    if currency_amount is None:
+        text = f'(Напишите сумму : от 0.001 {currency_name} или от 300 руб)'
+        await message.answer(text)
+        return
+
     comission_amount = currency.get_commision(native_amount)
     need_to_pay = native_amount + comission_amount
     random_salt = uuid.uuid4()
