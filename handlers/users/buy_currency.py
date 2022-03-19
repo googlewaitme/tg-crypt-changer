@@ -8,6 +8,7 @@ from datetime import datetime
 import asyncio
 import uuid
 
+from handlers.users.menu import send_menu
 from utils.db_api.transaction_api import TransactionApi
 from utils.db_api.user_api import UserApi
 from data import messages, config
@@ -49,7 +50,7 @@ async def send_offer(message: types.Message, state: FSMContext):
 
 @dp.message_handler(state=UserWaiting.INPUT_AGREEMENT)
 async def send_menu_if_not_agreement(message: types.Message, state):
-    await canceling_transaction(message, state)
+    await send_menu(message, state)
 
 
 @dp.message_handler(
