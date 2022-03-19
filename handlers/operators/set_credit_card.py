@@ -7,9 +7,8 @@ from aiogram.dispatcher.filters import Text
 from states.operator_waiting import OperatorWaiting
 from data.config import states
 from data import messages
-from keyboards.default import (cancel_button,
-                               operator_menu_key,
-                               operator_set_new_card_key)
+from keyboards.default import cancel_button, operator_set_new_card_key
+from keyboards.operator.default import operator_menu_key
 
 
 def is_right_input_of_card_number(message: types.Message):

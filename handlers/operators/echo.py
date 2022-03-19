@@ -2,7 +2,7 @@ from aiogram import types
 from aiogram.dispatcher import FSMContext
 
 from loader import dp
-from keyboards.default import operator_menu_key
+from keyboards.operator.default import operator_menu_key
 
 
 @dp.message_handler(

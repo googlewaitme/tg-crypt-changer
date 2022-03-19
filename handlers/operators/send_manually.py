@@ -9,9 +9,8 @@ from aiogram.dispatcher import FSMContext
 from utils.db_api.models import Cashbox, User, Transaction
 from states.operator_waiting import ManualTransaction
 from keyboards.default import (confirmation_key,
-                               operator_menu_key,
                                back_to_menu_key)
-from keyboards.operator.default import procents_key
+from keyboards.operator.default import procents_key, operator_menu_key
 from data import messages
 
 

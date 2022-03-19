@@ -5,8 +5,8 @@ from aiogram.dispatcher.filters import Text
 from aiogram import types
 
 from utils.db_api.models import User
-from keyboards.default import (confirmation_key, operator_menu_key,
-                               back_to_menu_key)
+from keyboards.default import confirmation_key, back_to_menu_key
+from keyboards.operator.default import operator_menu_key
 from data import messages
 from states.operator_waiting import OperatorWaiting
 

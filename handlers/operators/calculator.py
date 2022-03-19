@@ -2,10 +2,11 @@ from aiogram import types
 from aiogram.dispatcher.filters import Text
 from aiogram.dispatcher import FSMContext
 
-from loader import dp, coin_api, currencyes
+from loader import dp, currencyes
 from data import config, messages
 from states.operator_waiting import OperatorWaiting
-from keyboards.default import choose_currency, operator_menu_key
+from keyboards.default import choose_currency
+from keyboards.operator.default import operator_menu_key
 
 
 @dp.message_handler(Text(startswith='🧮'), is_operator=True)

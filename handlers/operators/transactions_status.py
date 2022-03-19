@@ -4,8 +4,8 @@ from aiogram import types
 from aiogram.dispatcher.filters import Text
 from aiogram.dispatcher import FSMContext
 
-from keyboards.default import (choose_currency, choose_operation_type,
-                               operator_menu_key)
+from keyboards.default import choose_currency, choose_operation_type
+from keyboards.operator.default import operator_menu_key
 from states.operator_waiting import OperatorWaiting
 
 

@@ -12,6 +12,7 @@ def get_markup():
     markup.row(
         KeyboardButton('🧮'),
         KeyboardButton('💳'),
+        KeyboardButton('Процент📌')
     )
     markup.row(
         KeyboardButton('🕹️'),
