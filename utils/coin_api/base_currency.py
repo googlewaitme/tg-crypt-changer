@@ -33,10 +33,14 @@ class BaseCurrency():
         balance = f"{self.name} {amount}"
         return balance.ljust(15) + " : " + str(account['native_balance'])
 
-    def get_transactions(self):
+    def get_transactions(self, operation_type):
         transactions = self.coin_api.get_transactions(self.resource_id)
         text = "Транзакции💸\n"
         for transaction in transactions:
+            if 'to' in transaction and operation_type != 'send':
+                continue
+            if 'to' not in transaction and operation_type != 'buy':
+                continue
             text += self._make_text_from_transaction(transaction)
             text += '\n-----\n'
         return text
