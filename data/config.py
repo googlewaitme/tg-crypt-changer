@@ -43,6 +43,7 @@ defaults = {
     'currency_in_work': ['BTC', 'LTC'],
     'remaining_BTC': 0,
     'remaining_LTC': 0,
+    'procent': 10,
 }
 for key in defaults:
     if key not in states:

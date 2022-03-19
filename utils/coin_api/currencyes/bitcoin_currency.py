@@ -8,7 +8,6 @@ class BitcoinCurrency(BaseCurrency):
             name='BTC',
             long_name='bitcoin',
             currency_commission=40,
-            commission_procent=0.1,
             coin_api=coin_api,
             resource_id=config.BTC_RESOURCE_ID
         )

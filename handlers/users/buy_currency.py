@@ -1,3 +1,5 @@
+from loader import dp, get_currency
+
 from aiogram import types
 from aiogram.dispatcher.filters import Text
 from aiogram.dispatcher import FSMContext
@@ -9,7 +11,6 @@ import uuid
 from utils.db_api.transaction_api import TransactionApi
 from utils.db_api.user_api import UserApi
 from data import messages, config
-from loader import dp, get_currency
 from states.user_waiting import UserWaiting
 from keyboards.default import (agreement_key, back_to_menu_key,
                                payed_or_not_key, menu_key)
@@ -57,7 +58,10 @@ async def send_menu_if_not_agreement(message: types.Message, state):
 async def send_text_must_be_float(message: types.Message, state: FSMContext):
     data = await state.get_data()
     currency_name = data['currency_name']
-    text = messages.OFFER_TEMPLATE.format(currency_name=currency_name)
+    text = messages.OFFER_TEMPLATE.format(
+        big_procent=config.states['procent'] - 2,
+        low_procent=config.states['procent'] - 4,
+        currency_name=currency_name)
     return await send_error_message(message, text)
 
 

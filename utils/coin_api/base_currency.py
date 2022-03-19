@@ -1,16 +1,15 @@
 from math import ceil
 from .api import CoinbaseApi
+from data.config import states
 
 
 class BaseCurrency():
     def __init__(self, name: str,
                  long_name: str, currency_commission: int,
-                 commission_procent: float, coin_api: CoinbaseApi,
-                 resource_id: str):
+                 coin_api: CoinbaseApi, resource_id: str):
         self.name = name
         self.long_name = long_name
         self.currency_commission = currency_commission
-        self.commission_procent = commission_procent
         self.coin_api = coin_api
         self.resource_id = resource_id
 
@@ -66,7 +65,7 @@ class BaseCurrency():
 
     def get_commision(self, count_of_rub, procent=None):
         if procent is None:
-            procent = self.commission_procent
-        commission = max(100, ceil(count_of_rub * procent))
+            procent = states['procent']
+        commission = max(100, ceil(count_of_rub * procent / 100))
         commission += self.currency_commission
         return commission
