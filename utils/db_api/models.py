@@ -52,5 +52,13 @@ class Transaction(BaseModel):
         return info
 
 
+class CashArrival(BaseModel):
+    currency_name = CharField(max_length=10)
+    currency_amount = FloatField()
+    native_amount = FloatField()
+    is_operator_checked = BooleanField(default=False)
+    transaction_id = CharField(max_length=100, unique=True)
+
+
 if __name__ == '__main__':
     create_tables()

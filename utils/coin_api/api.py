@@ -1,5 +1,7 @@
 from coinbase.wallet.client import Client
 from datetime import datetime, timedelta
+from utils.db_api.models import CashArrival
+
 import uuid
 
 
@@ -49,6 +51,29 @@ class CoinbaseApi:
         for account in accounts:
             if name in account['currency']:
                 print(account)
+
+    def get_send_transactions(self, resource_id):
+        transactions = self.get_transactions(resource_id)
+        answer = []
+        for transaction in transactions:
+            if 'to' in transaction:
+                answer.append(transaction)
+        return answer
+
+    def get_buy_transactions(self, resource_id):
+        transactions = self.get_transactions(resource_id)
+        answer = []
+        for transaction in transactions:
+            if 'to' not in transaction:
+                defaults = {
+                    'currency_name': transaction['amount']['currency'],
+                    'native_amount': transaction['native_amount']['amount'],
+                    'currency_amount': transaction['amount']['amount']
+                }
+                CashArrival.get_or_create(
+                    transaction_id=transaction['id'], defaults=defaults)
+                answer.append(transaction)
+        return answer
 
     def get_transactions(self, resource_id):
         return self.client.get_transactions(resource_id)['data']

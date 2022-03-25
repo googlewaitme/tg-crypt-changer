@@ -43,7 +43,10 @@ async def send_offer(message: types.Message, state: FSMContext):
     markup = back_to_menu_key.get_markup()
     data = await state.get_data()
     currency_name = data['currency_name']
-    text = messages.OFFER_TEMPLATE.format(currency_name=currency_name)
+    text = messages.OFFER_TEMPLATE.format(
+        low_procent=config.states['procent'] - 4,
+        big_procent=config.states['procent'] - 2,
+        currency_name=currency_name)
     await message.answer(text, reply_markup=markup)
     await UserWaiting.INPUT_COUNT_OF_CURRENCY.set()
 

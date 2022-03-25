@@ -9,6 +9,7 @@ class ManualTransaction(StatesGroup):
 
 
 class OperatorWaiting(StatesGroup):
+    INPUT_COUNT_OF_PAYING = State()
     INPUT_NEW_PROCENT = State()
     INPUT_TRANSACTIONS_CURRENCY = State()
     INPUT_USER_ID_FOR_BAN = State()

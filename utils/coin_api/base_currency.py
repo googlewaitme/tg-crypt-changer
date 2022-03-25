@@ -1,6 +1,7 @@
 from math import ceil
 from .api import CoinbaseApi
 from data.config import states
+from utils.db_api.models import CashArrival
 
 
 class BaseCurrency():
@@ -34,14 +35,20 @@ class BaseCurrency():
         return balance.ljust(15) + " : " + str(account['native_balance'])
 
     def get_transactions(self, operation_type):
-        transactions = self.coin_api.get_transactions(self.resource_id)
+        if operation_type == 'buy':
+            data = self.coin_api.get_buy_transactions(self.resource_id)
+        else:
+            data = self.coin_api.get_send_transactions(self.resource_id)
         text = "Транзакции💸\n"
-        for transaction in transactions:
-            if 'to' in transaction and operation_type != 'send':
-                continue
-            if 'to' not in transaction and operation_type != 'buy':
-                continue
+        for transaction in data:
             text += self._make_text_from_transaction(transaction)
+            if operation_type == 'buy':
+                cash_arrival = CashArrival.get(transaction_id=transaction.id)
+                operator_info = 'Информация о поступлении не указана🟥'
+                if cash_arrival.is_operator_checked:
+                    operator_info = "Указана новая информация🟩"
+                text += "\n" + operator_info
+                text += f"\nОценка в рублях: {cash_arrival.native_amount}"
             text += '\n-----\n'
         return text
 
@@ -73,3 +80,13 @@ class BaseCurrency():
         commission = max(100, ceil(count_of_rub * procent / 100))
         commission += self.currency_commission
         return commission
+
+    def update_cash_arrival(self, id, **params):
+        query = CashArrival.update(**params).where(CashArrival.id == id)
+        query.execute()
+
+    def get_cash_arrival_which_operator_not_checked(self):
+        cash_arrival = CashArrival.get_or_none(
+            currency_name=self.name,
+            is_operator_checked=False)
+        return cash_arrival
